@@ -1,11 +1,28 @@
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import dominio.Veiculo;
+import util.JpaUtil;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import java.math.BigDecimal;
 
 public class Main {
 
     public static void main(String[] args) {
-        EntityManagerFactory entityManager = Persistence
-                .createEntityManagerFactory("AlgaWorks-PU");
-        entityManager.close();
+        EntityManager manager = JpaUtil.getEntityManager();
+        EntityTransaction tx = manager.getTransaction();
+
+        tx.begin();
+
+        Veiculo veiculo = new Veiculo();
+        veiculo.setFabricante("Honda");
+        veiculo.setModelo("Civic");
+        veiculo.setAnoFabricacao(2020);
+        veiculo.setAnoModelo(2020);
+        veiculo.setValor(new BigDecimal(90500));
+
+        manager.persist(veiculo);
+        tx.commit();
+        manager.close();
+        JpaUtil.close();
     }
 }
